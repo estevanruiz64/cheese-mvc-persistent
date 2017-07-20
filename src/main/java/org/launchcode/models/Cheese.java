@@ -1,19 +1,21 @@
 package org.launchcode.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.util.List;
+
+import static javax.swing.text.StyleConstants.Size;
 
 /**
  * Created by LaunchCode
  */
-@Entity
+@Entity //indicates that it should be a persistent class
 public class Cheese {
 
-    @Id
-    @GeneratedValue
+    @Id //says to provide an id
+    @GeneratedValue //says to generate the id for us
     private int id;
 
     @NotNull
@@ -24,14 +26,18 @@ public class Cheese {
     @Size(min=1, message = "Description must not be empty")
     private String description;
 
-    private CheeseType type;
+    @ManyToOne
+    private Category category;
+
+    @ManyToMany(mappedBy = "cheeses")
+    private List<Menu> menus;
 
     public Cheese(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Cheese() { }
+    public Cheese() { } //this default must be provided so that Hibernate can create objects w/ the database
 
     public int getId() {
         return id;
@@ -53,11 +59,11 @@ public class Cheese {
         this.description = description;
     }
 
-    public CheeseType getType() {
-        return type;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setType(CheeseType type) {
-        this.type = type;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
